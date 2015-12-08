@@ -1,3 +1,6 @@
+__author__ = 'Nurcan Tuncbag' # Modified by Anthony Gitter
+__email__ = 'ntuncbag@mit.edu'
+
 import os, math
 import networkx
 import pickle, operator
