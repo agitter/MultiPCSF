@@ -19,13 +19,8 @@ def sort_table(table, cols):
         table = sorted(table, key=operator.itemgetter(col))
     return table
 
+# No longer used
 def idmatchHuman(species):
-#    species = species.lower()
-#    if species == 'human': 
-#         idfile=pickle.load(open('/nfs/data/ntuncbag/GeneSymbolMapping/humGeneToEnsPep.pkl','r'))
-#    if species == 'mouse':
-#         idfile=pickle.load(open('/nfs/data/ntuncbag/GeneSymbolMapping/mm9SymbolToEnsPep_pep2gene.pkl','r'))
-#    return idfile
     return dict()
 
 # Return a list of all unique receptors in the file
@@ -506,59 +501,6 @@ def NetworkMapping(outputpath, stppath, stpfile, w, b, D,species):
 
     return H, H1, H2
 
-# Unused
-def NetworkMapping2(outputpath, stppath, stpfile, w, b, D):
-    idfile = idmatchHuman(species)
-    G1 = networkx.Graph()
-    G2 = networkx.DiGraph()
-    H = networkx.Graph()
-    H1 = networkx.Graph()
-    H2 = networkx.DiGraph()
-    file = open(stppath+"/"+stpfile+'.stp', "r")
-    while 1:
-        line = file.readline()
-        if line == "": break
-        if line.startswith("E"): # or line.startswith("D"):
-            temp = line.strip().split()
-            G1.add_edge(temp[1], temp[2], weight=float(temp[3]))
-        if line.startswith("D"): # or line.startswith("D"):
-            temp = line.strip().split()
-            G2.add_edge(temp[1], temp[2], weight=float(temp[3]))
-    resultfilename = "%s_%s_%s_%s.txt" % (stpfile, str(w), str(b), str(D))
-    nodeSet = SteinerTree(outputpath, resultfilename)[0]
-    for node1 in nodeSet:
-        for node2 in nodeSet:
-            #if G1.has_edge(node1,node2) == True:
-            if G1.has_edge(node1,node2):
-                weight1 = G1.get_edge_data(node1, node2)
-                H1.add_edge(node1, node2, weight=weight1['weight'])
-                H.add_edge(node1, node2, weight=weight1['weight'])
-            #if G2.has_edge(node1,node2) == True:
-            if G2.has_edge(node1,node2):
-                weight1 = G2.get_edge_data(node1, node2)
-                H2.add_edge(node1, node2, weight=weight1['weight'])
-                H.add_edge(node1, node2, weight=weight1['weight'])
-    file.close
-    symbolfilename = "%s/symbol_fullnetwork_%s_%s_%s_%s.txt" % (outputpath, stpfile, str(w), str(b), str(D))
-    symbolfile = open(symbolfilename,'w')
-    print len(H)
-    for edge in H.edges():
-        node1, node2 = edge
-        try:
-            node1 = idfile[node1]
-        except KeyError:
-            node1 = [node1]
-        try:
-            node2 = idfile[node2]
-        except KeyError:
-            node2 = [node2]
-        for n1 in node1:
-            for n2 in node2:
-                symbolfile.writelines('%s %s\n'%(n1,n2))
-    symbolfile.close()
-    
-    return H, H1, H2
-
 # Writes the pairs of nodes in the message passing output
 # Does not do the mapping presently
 def sifidConverter(outputpath, stpfile, w, b, D, species):
@@ -585,35 +527,6 @@ def sifidConverter(outputpath, stpfile, w, b, D, species):
                 symbolfile.writelines('%s %s\n'%(n1,n2))
     symbolfile.close()
     file.close()
-
-# Unused
-def interclusterconnectivity(T1,T2,H):
-    inter = 0
-    tempG = networkx.Graph()
-    for node1 in T1:
-        for node2 in T2:
-            tempG.add_edge(node1, node2)
-    for edges in tempG.edges():
-        if H.has_edge(edges[0],edges[1]):
-   #             edges = list(edges)
-   #             if (node1 in edges) and (node2 in edges):
-            inter += 1
-             #       print edges
-    return inter
-
-# Unused
-def intraclusterconnectivity(T, H):
-    intra = 0
-    for i in range(len(T)):
-        for j in range(len(T)):
-            if i < j:
-                node1 = T[i]
-                node2 = T[j]
-                for edges in H.edges():
-                    edges = list(edges)
-                    if (node1 in edges) and (node2 in edges):
-                        intra += 1
-    return intra, len(T)
 
 # Returns a list of numbers from start to end, non-inclusive of the end value
 def frange(start, end=None, inc=None):
