@@ -18,7 +18,8 @@ The breast cancer tumor sample data and protein-protein interaction network
 data described in the Multi-PCSF manuscript are provided as an example
 dataset.  If you use these data in a manuscript, cite [TCGA 2012] for
 the breast cancer data and [Szklarczyk et al 2011] for the STRING
-protein-protein interaction network.
+protein-protein interaction network and see their respective websites
+for the terms of use.
 
 ## Developers
 * Nurcan Tuncbag
