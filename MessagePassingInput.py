@@ -1,6 +1,6 @@
 __author__ = 'Nurcan Tuncbag' # Modified by Anthony Gitter
 
-import string, operator, os, sys
+import sys
 from optparse import OptionParser
 
 def Kinase_Substrate(interactomepath, filename):
@@ -10,7 +10,6 @@ def Kinase_Substrate(interactomepath, filename):
         line = file.readline()
         if line == "": break
         # Make the protein names upper case
-        #temp = line.strip().split()
         temp = line.strip().upper().split()
         kinase = temp[1]
         substrate = temp[0]
@@ -18,40 +17,31 @@ def Kinase_Substrate(interactomepath, filename):
         kippair = [kinase, substrate]
         kippair.sort()
         # Use the same number of underscores as the undirected dictionary
-        #kipdict[kippair[0]+"_"+kippair[1]] = substrate + "_" + kinase + "_" + weight
         kipdict[kippair[0]+"____"+kippair[1]] = substrate + "_" + kinase + "_" + weight
     file.close()
     return kipdict
 
-import math
 
 # Change the default directedfilename from None to "None"
 def combine_directed_indirected_PPI(interactomepath, indirectedfilename, directedfilename="None"):
-    index = 0
     file = open(interactomepath+'/'+indirectedfilename,"r")
     interactiondict = {}
     combined = []
-    terminals = []
     interactome = set()
     while 1:
         line = file.readline()
         if line == "": break
         # Make upper case
-        #temp = line.strip().split()
         temp = line.strip().upper().split()
         node1 = temp[0]
         node2 = temp[1]
         # Skip lines that don't have exactly 3 parts, ignoring
         # lines without weights and nodes with spaces in their names
-        #if len(temp) < 3:
-            #print temp
         if len(temp) != 3:
             print "Skipping: " + line
         else:
             weight = float(temp[2])
-            #if weight >= 0.99:
-            #    weight = 0.99
-            #weight = "%f" % (1-weight)
+
             weight = weight2Cost(weight)
             # Don't filter high cost edges, or make the threshold a parameter
             #if node1 != node2 and float(weight) <= 0.5:
@@ -60,53 +50,36 @@ def combine_directed_indirected_PPI(interactomepath, indirectedfilename, directe
                 pair.sort()
                 interactome.add(node1)
                 interactome.add(node2)
-                #interactiondict[pair[0]+"____"+pair[1]] = weight
                 interactiondict[pair[0]+"____"+pair[1]] = str(weight)
     file.close()
-    # Check for "None" instead of None
     if directedfilename == "None":
-    #if directedfilename == None:
         for interaction in interactiondict.keys():
             n1 = interaction.split("____")[0]
             n2 = interaction.split("____")[1]
             combined.append(["E", n1, n2, interactiondict[interaction]])
-    #if directedfilename != None:
     else:
         kipdict = Kinase_Substrate(interactomepath, directedfilename)
         for interaction in interactiondict.keys():
             try:
                 kipint = kipdict[interaction]
                 kinaseweight = float(kipint.split("_")[2])
-                # Use the same weight->cost transformation
-                #if kinaseweight >= 0.99:
-                #    kinaseweight = 0.99
-                #kinaseweight = -math.log(kinaseweight,2)
+
                 kinaseweight = weight2Cost(kinaseweight)
                 combined.append(["D", kipint.split("_")[0], kipint.split("_")[1], kinaseweight])
             except KeyError:
                 n1 = interaction.split("____")[0]
                 n2 = interaction.split("____")[1]
-                #n1 = interaction.split("_")[0]
-                #n2 = interaction.split("_")[1]
                 combined.append(["E", n1, n2, interactiondict[interaction]])
         for item in kipdict.keys():
             node1 = kipdict[item].split("_")[0]
             node2 = kipdict[item].split("_")[1]
-            #kinaseweight = float(kipint.split("_")[2])
             kinaseweight = float(kipdict[item].split("_")[2])
-            # Use the same weight->cost transformation
-            #if kinaseweight >= 0.99:
-            #    kinaseweight = 0.99
-            #kinaseweight = -math.log(kinaseweight,2)
             kinaseweight = weight2Cost(kinaseweight)
-            # Allow kinases or substrates that are not already in the interactome
-            #if (node1 in interactome) and (node2 in interactome):
             if item not in interactiondict.keys():
                 combined.append(["D", node1, node2, kinaseweight])
                 interactome.add(node1)
                 interactome.add(node2)
     interactome = list(interactome)
-    #file.close()
     return combined, interactome
 
 def connectTF_DNA(interactomepath, tfdnafilename, mrnaterminals, interactome):
@@ -119,17 +92,13 @@ def connectTF_DNA(interactomepath, tfdnafilename, mrnaterminals, interactome):
             line = file.readline()
             if line == "": break
             # Make names upper case
-            #temp = line.split()
             temp = line.upper().split()
             node1 = temp[0]
             node2 = temp[1]
             weight = float(temp[2])
-            #pair = [node1,node2]
             # Check for _MRNA
-            #if (node1 in interactome) and (node2+"mrna" in mrnaterminals):
             if (node1 in interactome) and (node2+"_MRNA" in mrnaterminals):
                 # Use the weight in the file
-                #tfdna.add("D %s %s %f\n" % (node2+"mrna", node1, -math.log(0.90,2)))
                 tfdna.add("D %s %s %f\n" % (node2+"_MRNA", node1, weight2Cost(weight)))
         print "%d TF-DNA edges" % len(tfdna)
         file.close()
@@ -143,12 +112,10 @@ def terminalNodes(terminalpath, terminalfile, beta, mrnabeta):
         line = file.readline()
         if line == "": break
         # Make names upper case
-        #temp = line.strip().split()
         temp = line.strip().upper().split()
         nodename =  temp[0]
         weight = float(temp[1])
         # Check for _MRNA
-        #if nodename.endswith("mrna"):
         if nodename.endswith("_MRNA"):
             terminals.append(["W", nodename, mrnabeta*weight])
             mrnaterminals.append(nodename)
@@ -221,14 +188,12 @@ def main():
             # Don't print any gene prizes if there are no TF-gene edges
             if tfdna == set():
                 # Check for "_MRNA"
-                #if item[1].endswith('mrna') == False:
                 if not item[1].endswith("_MRNA"):
                     file.writelines('%s %s %s\n' % (item[0], item[1], item[2]))
             if tfdna != set():
                 file.writelines('%s %s %s\n' % (item[0], item[1], item[2]))
         if root != 'None':
             # Capitalize the root
-            #file.writelines('R %s\n' % root)
             file.writelines('R %s\n' % root.upper())
         file.close()
 

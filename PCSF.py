@@ -1,9 +1,8 @@
 __author__ = 'Nurcan Tuncbag' # Modified by Anthony Gitter
 
-import os, math
+import os
 import networkx
-import pickle, operator
-import string
+import operator
 import subprocess
 from optparse import OptionParser
 
@@ -18,7 +17,7 @@ def sort_table(table, cols):
         table = sorted(table, key=operator.itemgetter(col))
     return table
 
-# No longer used
+# No longer supported
 def idmatchHuman(species):
     return dict()
 
@@ -42,28 +41,19 @@ def givenset(stppath,targetfile):
 def givenset_terminalexcluded(stppath, targetfile, stpfile):
     artificialTargets = set()
     file = open(os.path.join(stppath, targetfile),"r")
-    #file = open(stppath+''+targetfile,"r")
     while 1:
         line = file.readline()
         if line == "": break
-        receptor = line.strip().split()[0]#.replace("9606.","")
+        receptor = line.strip().split()[0]#
         artificialTargets.add(receptor)
     file.close()
     artificialTargets = list(artificialTargets)
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    #file = open(stppath+'/'+stpfile+'.stp',"r")
-    nodelist = set()
     terminalnodelist = set()
     while 1:
         line = file.readline()
         if line == "":
             break
-#        if line.startswith("E") or line.startswith("D"):
-#            temp = line.split()
-#            node1 = temp[1]
-#            node2 = temp[2]
-#            nodelist.add(node1)
-#            nodelist.add(node2)
         if line.startswith("W"):
             temp = line.strip().split()
             node = temp[1]
@@ -83,13 +73,7 @@ def ReceptomeRanking(stppath,stpfile,targetfile,species):
     receptorDegree = []
     idfile = idmatchHuman(species)
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    #file = open(stppath+'/'+stpfile+'.stp',"r")
-    nodelist = givenset(stppath, targetfile) #'diseases.txt') #'artificialTargetFile')
-    artificial = "DUMMY"
-    edgelist = []
-    #cost = []
-    terminals = []
-    terminalset = set()
+    nodelist = givenset(stppath, targetfile)
     while 1:
         line = file.readline()
         if line == "": break
@@ -97,9 +81,6 @@ def ReceptomeRanking(stppath,stpfile,targetfile,species):
             temp = line.split()
             node1 = temp[1]
             node2 = temp[2]
-#            nodelist.add(node1)
-#            nodelist.add(node2)
-            #cost.append(float(temp[3]))
             G.add_edge(node1,node2)
 
     for node in nodelist:
@@ -112,13 +93,11 @@ def ReceptomeRanking(stppath,stpfile,targetfile,species):
             receptorDegree.append([nodename, deg])
     sortedlist = sort_table(receptorDegree, [1,1])
     index1 = -1
-    #print sortedlist[-10:-1]
     dreceptomeRank = {}
     for i in range(len(sortedlist)):
         index = index1-i
         proteins = sortedlist[index][0]
         for protein in proteins:
-#            print protein, i
             dreceptomeRank[protein] = i
     print len(dreceptomeRank)
     return dreceptomeRank
@@ -126,7 +105,6 @@ def ReceptomeRanking(stppath,stpfile,targetfile,species):
 # Return a set of all nodes in the network
 def allnodes(stppath, stpfile):
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    #file = open(stppath+'/'+stpfile+'.stp',"r")
     nodelist = set()
     while 1:
         line = file.readline()
@@ -136,9 +114,7 @@ def allnodes(stppath, stpfile):
             temp = line.split()
             node1 = temp[1]
             node2 = temp[2]
-#            if node1.endswith('mrna') == False:
             nodelist.add(node1)
-#            if node2.endswith('mrna') == False:
             nodelist.add(node2)
     print len(nodelist)
     return nodelist
@@ -146,7 +122,6 @@ def allnodes(stppath, stpfile):
 # Return a list of all nodes in the network that are not terminals
 def terminalexcluded(stppath, stpfile):
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    #file = open(stppath+'/'+stpfile+'.stp',"r")
     nodelist = set()
     terminalnodelist = set()
     while 1:
@@ -174,7 +149,6 @@ def terminalexcluded(stppath, stpfile):
 # Return all edges for which neither endpoint is a member of knockoutlist
 def knockout(stppath,stpfile,knockoutlist):
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    #file = open(stppath+'/'+stpfile+'.stp',"r")
     edgelist = []
     while 1:
         line = file.readline()
@@ -183,9 +157,6 @@ def knockout(stppath,stpfile,knockoutlist):
             temp = line.split()
             node1 = temp[1]
             node2 = temp[2]
-#            nodelist.add(node1)
-#            nodelist.add(node2)
-            #cost.append(float(temp[3]))
             if (node1 not in knockoutlist) and (node2 not in knockoutlist):
                 edgelist.append([temp[0], node1,node2,float(temp[3])])
     return edgelist
@@ -200,16 +171,14 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
     if connectiontype == '2':
         nodelist = terminalexcluded(stppath, stpfile)
     if connectiontype == '3':
-        nodelist = givenset(stppath, targetfile)#'diseases.txt')#'artificialTargetFile')
+        nodelist = givenset(stppath, targetfile)
     if connectiontype == '4':
         nodelist = givenset_terminalexcluded(stppath, targetfile, stpfile)
 
     ind = 0
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    #file = open(stppath+'/'+stpfile+'.stp',"r")
     artificial = "DUMMY"
     edgelist = []
-    #cost = []
     terminals = []
     terminalset = set()
     while 1:
@@ -220,25 +189,14 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
             node1 = temp[1]
             node2 = temp[2]
             ind += 1
-#            nodelist.add(node1)
-#            nodelist.add(node2)
-            #cost.append(float(temp[3]))
-            #print ind
-#            if connectiontype == '3':
-#                if (node1 in nodelist or node2 in nodelist) and float(temp[3])<=0.225:
-#                    edgelist.append([temp[0], node1,node2, 0.01])
-#                elif (node1 not in nodelist and node2 not in nodelist):                
-#                    edgelist.append([temp[0], node1,node2,float(temp[3])])
-#            else:
             edgelist.append([temp[0], node1,node2,float(temp[3])])
 
         if line.startswith("W"):
             temp = line.strip().split()
             node = temp[1]
-            prize = float(temp[2])#1.0 #float(temp[2])/4.0 #1.0 #float(temp[2])/4.0
+            prize = float(temp[2])
             if connectiontype == '1':
                 if node.endswith('_MRNA'):
-                #if node.endswith('mrna'):
                     terminals.append("W %s %.4f\n" % (node, b*prize))
                     terminalset.add(node)
                 else:
@@ -248,7 +206,6 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
                 if exclude == True:
                     if node not in nodelist:
                         if node.endswith('_MRNA'):
-                        #if node.endswith('mrna'):
                             terminals.append("W %s %.4f\n" % (node, b*prize))
                             terminalset.add(node)
                         else:
@@ -256,7 +213,6 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
                             terminalset.add(node)
                 if exclude == False:
                     if node.endswith('_MRNA'):
-                    #if node.endswith('mrna'):
                         terminals.append("W %s %.4f\n" % (node, b*prize))
                         terminalset.add(node)
                     else:
@@ -269,23 +225,14 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
     # edges involved a KO'd node
     if knockoutlist != []:
         edgelist = knockout(stppath,stpfile,knockoutlist)
-    # No longer write the input to disk, instead build the fild in memory
-    #file = open("%s/%s_%s_%s_%s.dat" % (outputpath, stpfile, str(w), str(b), str(D)),"w")
     inputData = []
     for item in edgelist:
-        #file.writelines("%s %s %s %f\n" %(item[0], item[1], item[2], item[3]))
         inputData.append("%s %s %s %f\n" %(item[0], item[1], item[2], item[3]))
     for item in nodelist:
-        #file.writelines("D %s %s %.4f\n" %(item, artificial, w))
         inputData.append("D %s %s %.4f\n" %(item, artificial, w))
-    #for item in terminals:
-        #file.writelines(item)#"W %s %f\n" % (item, b*1.0/len(terminalnodelist)))
     inputData.extend(terminals)
-    #file.writelines("W %s 100.0\n" % artificial)
     inputData.append("W %s 100.0\n" % artificial)
-    #file.writelines("R %s\n\n" % artificial)
     inputData.append("R %s\n\n" % artificial)
-    #file.close()
     idfile = idmatchHuman(species)
     file = open("%s/gbm_cell_line.attr" % outputpath,"w")
     for t in terminalset:
@@ -302,15 +249,11 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
 # Start the message passing algorithm
 # Takes the input data as a list of lines instead of reading them from disk
 def RunMSGAlgorithm(msgpath, D, w, b, outputpath, stpfile, connectiontype, inputData, threads):
-    # No longer have an input file.  Open the output files.
-    #inputfile = "%s/%s_%s_%s_%s.dat" % (outputpath, stpfile, str(w), str(b),str(D))
     resultfilename = "%s/%s_%s_%s_%s.txt" % (outputpath, stpfile, str(w), str(b),str(D))
     objectivefilename = "%s/%s_%s_%s_%s.objective" % (outputpath, stpfile, str(w), str(b),str(D))
     with open(resultfilename, "w") as resultFile:
         with open(objectivefilename, "w") as objFile:
-            #os.system( "%s/msgsteiner -d %s -t 1000000 -o -r 1e-5 -g 1e-3 < %s > %s 2> %s" % (msgpath, D, inputfile, resultfile, objectivefile))
             # Start a subprocess with a 1 line buffer size
-            #subprocArgs = ["%s/msgsteiner" % msgpath, "-d", D, "-t", "1000000", "-o", "-r", "1e-5", "-g", "1e-3"]
             subprocArgs = ["%s/msgsteiner9" % msgpath, "-d", D, "-t", "1000000", "-o", "-r", "1e-5", "-g", "1e-3", "-j", str(threads)]
             subproc = subprocess.Popen(subprocArgs, bufsize=1, stdin=subprocess.PIPE, stdout=resultFile, stderr=objFile)
             for line in inputData:
@@ -341,15 +284,13 @@ def OutputPCSFCheck(w, b, D, outputpath, stpfile,species):
         H.add_edge(node1,node2)
         if node1 != "DUMMY" and node2 != "DUMMY":
             G.add_edge(node1,node2)
-            #edgeweights.append(float(temp[3]))
         if node1 == 'DUMMY':
             dummyPartners.append(node2)
         if node2 == 'DUMMY':
             dummyPartners.append(node1)
-#    print len(dummyPartners)
     file.close()
     # A list, where each element in the list is itself a list of nodes in the component
-    nodeList = networkx.connected_components(G) #component.connected_components(G)
+    nodeList = networkx.connected_components(G)
     treesize = []
     nonredundanttreesize = []
     tempnodelist = []
@@ -358,13 +299,9 @@ def OutputPCSFCheck(w, b, D, outputpath, stpfile,species):
         for node in nodes:
             nodeClusterDict[node] = len(nodes)
         if len(nodes) >= 10:
-             #for n in nodes:
             nonredundanttreesize.append(len(nodes))
             for n in nodes:
-#                    if n not in terminalnodelist:
-#                        print n
                 tempnodelist.append(n)
-#                print 'batch'
         treesize.append(len(nodes))
     outfile.writelines("Parameters that are used: w = %s, b = %s, D = %s\n\n" % (str(w), str(b), str(D)))
     # Special case if the Steiner forest that was output was empty
@@ -380,17 +317,11 @@ def OutputPCSFCheck(w, b, D, outputpath, stpfile,species):
         ind += 1
         outfile.writelines('T'+str(ind)+'\t'+str(ts)+'\n')
     outfile.writelines('-------------\n')
-    #idfile = idmatchHuman(species)
-##    receptomeDegDict = ReceptomeRanking(stppath,stpfile)
     for item in dummyPartners:
         try:
             subTsize = nodeClusterDict[item]
             if subTsize >= 2:
-##                #print item, subTsize
-                #try:
-                #    for s in idfile[item]:
-                #outfile.writelines( s + "\t" + str(subTsize) + '\n') #'ranking = ', receptomeDegDict[s], 'TreeSize',subTsize
-                #except KeyError:
+
                 outfile.writelines(item + "\t" + str(subTsize) + '\n') #'ranking = ', receptomeDegDict[s], 'TreeSize', subTsize
         except KeyError:
             continue
@@ -408,8 +339,7 @@ def SteinerTree(resultpath, resultfilename):
         temp = line.strip().split()
         nodeSet.add(temp[0])
         nodeSet.add(temp[1])
-        #if temp[0].endswith('mrna') == False and temp[2].endswith('mrna') == False:
-        G.add_edge(temp[0], temp[1])#, weight=float(temp[2]))
+        G.add_edge(temp[0], temp[1])
     file.close()
     return nodeSet, G
 
@@ -433,10 +363,10 @@ def NetworkMapping(outputpath, stppath, stpfile, w, b, D,species):
     while 1:
         line = file.readline()
         if line == "": break
-        if line.startswith("E"): # or line.startswith("D"):
+        if line.startswith("E"):
             temp = line.strip().split()
             G1.add_edge(temp[1], temp[2], weight=float(temp[3]))
-        if line.startswith("D"): # or line.startswith("D"):
+        if line.startswith("D"):
             temp = line.strip().split()
             G2.add_edge(temp[1], temp[2], weight=float(temp[3]))
     resultfilename = "%s_%s_%s_%s.txt" % (stpfile, str(w), str(b), str(D))
@@ -447,12 +377,10 @@ def NetworkMapping(outputpath, stppath, stpfile, w, b, D,species):
         for node1 in nodeSet:
             for node2 in nodeSet:
                 if G1.has_edge(node1,node2):
-                #if G1.has_edge(node1,node2) == True:
                     weight1 = G1.get_edge_data(node1, node2)
                     H1.add_edge(node1, node2, weight=weight1['weight'])
                     H.add_edge(node1, node2, weight=weight1['weight'])
                 if G2.has_edge(node1,node2):
-                #if G2.has_edge(node1,node2) == True:
                     weight1 = G2.get_edge_data(node1, node2)
                     H2.add_edge(node1, node2, weight=weight1['weight'])
                     H.add_edge(node1, node2, weight=weight1['weight'])
@@ -462,27 +390,16 @@ def NetworkMapping(outputpath, stppath, stpfile, w, b, D,species):
     for node1 in nodeSet:
         for node2 in nodeSet:
             if G1.has_edge(node1,node2):
-            #if G1.has_edge(node1,node2) == True:
                 weight1 = G1.get_edge_data(node1, node2)
-                #H1.add_edge(node1, node2, weight=weight1['weight'])
                 I.add_edge(node1, node2, weight=weight1['weight'])
             if G2.has_edge(node1,node2):
-            #if G2.has_edge(node1,node2) == True:
                 weight1 = G2.get_edge_data(node1, node2)
-                #H2.add_edge(node1, node2, weight=weight1['weight'])
                 I.add_edge(node1, node2, weight=weight1['weight'])
     symbolfilename = "%s/symbol_fullnetwork_%s_%s_%s_%s.txt" % (outputpath, stpfile, str(w), str(b), str(D))
     symbolfile = open(symbolfilename,'w')
-    #print len(H)
     for edge in I.edges():
         node1, node2 = edge
-        #try:
-        #node1 = idfile[node1]
-        #except KeyError:
         node1 = [node1]
-        #try:
-        #node2 = idfile[node2]
-        #except KeyError:
         node2 = [node2]
         if S.has_edge(edge[0], edge[1]) == True:
             for n1 in node1:
@@ -508,18 +425,11 @@ def sifidConverter(outputpath, stpfile, w, b, D, species):
     symbolfilename = "%s/symbol_%s_%s_%s_%s.txt" % (outputpath, stpfile, str(w), str(b), str(D))
     file = open(inputfile,'r')
     symbolfile = open(symbolfilename,'w')
-#    print idfile.keys()[0]
     while 1:
         line = file.readline()
         if line == "": break
         node1, node2 = line.split()[0:2]
-        #try:
-        #    node1 = idfile[node1]
-        #except KeyError:
         node1 = [node1]
-        #try:
-        #    node2 = idfile[node2]
-        #except KeyError:
         node2 = [node2]
         for n1 in node1:
             for n2 in node2:
@@ -578,11 +488,6 @@ def main():
     W = options.W
     beta = options.beta
     exclude = (options.exclude == '1')
-    #exclude = options.exclude
-    #if exclude == '1':
-    #    exclude = True
-    #if exclude == '2':
-    #    exclude = False
     targetfile = options.targetfile
     species = options.species
     betainit, betaend, betaincrement = beta.split('_')
@@ -598,9 +503,6 @@ def main():
             nodeList = OutputPCSFCheck(w, b, D, outputpath, stpfile,species)
             sifidConverter(outputpath, stpfile, w, b, str(D), species)
             H = NetworkMapping(outputpath, stppath, stpfile, w, b, D, species)[0]
-            # Using subprocess now to send input to the message passing code, there is no file to remove
-            #inputfile = "%s/%s_%s_%s_%s.dat" % (outputpath, stpfile, str(w), str(b),str(D))
-            #os.system('rm %s' % inputfile)
 
 main()
 

@@ -1,5 +1,4 @@
 from optparse import OptionParser
-import string
 import sys
 import os
 import shutil
@@ -365,11 +364,6 @@ def UpdateStp(artificialPrizes, degreePenalties, potentialSteiner, inPath, outPa
                 if node in degreePenalties:
                     degreePenalty = degreePenalties[node]
                 outStp.write("W %s %f\n" % (node, artificialPrize + degreePenalty))
-
-# TODO remove
-#        for node in artificialPrizes.iterkeys():
-#            if node in potentialSteiner:
-#                outStp.write("W %s %f\n" % (node, artificialPrizes[node]))
 
 
 # Created weighted artificial prizes that are derived from the frequency
