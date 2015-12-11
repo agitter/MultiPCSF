@@ -4,11 +4,13 @@
 
 # Multi-PCSF
 An implementation of the Multi-PCSF algorithm described in [Gitter et al 2014].
-This version of the PCSF code is no longer under active development.  Please
-see [Omics Integrator] for the current version of PCSF from Ernest Fraenkel's
-lab.  The Omics Integrator website describes how to install the [msgsteiner]
-dependency, which is also required by Multi-PCSF.
+This is an early, rough version of the PCSF code and is no longer under active
+development.  Please see [Omics Integrator] for the current version of PCSF
+from Ernest Fraenkel's lab.  However, Omics Integrator does not yet support the
+multi-sample feature introduced by Multi-PCSF.  The Omics Integrator website
+describes how to install the [msgsteiner] dependency, which is also required
+by Multi-PCSF.
 
-## Authors
+## Developers
 * Nurcan Tuncbag
 * Anthony Gitter

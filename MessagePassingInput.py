@@ -1,5 +1,4 @@
 __author__ = 'Nurcan Tuncbag' # Modified by Anthony Gitter
-__email__ = 'ntuncbag@mit.edu'
 
 import string, operator, os, sys
 from optparse import OptionParser
