@@ -611,7 +611,7 @@ def CreateParser():
 
 
     #parser.add_option("--outputpath", type="string", dest="outputpath", help="This path points to the directory where the output files will be written",default='None')
-    parser.add_option("--msgpath",type="string",dest="msgPath",help="This path points to the directory where the message-passing code is available",default='None')
+    parser.add_option("--msgpath",type="string",dest="msgPath",help="The path and file name of the msgsteiner executable",default='./msgsteiner')
     parser.add_option("--depth",type="int",dest="depth",help="Depth parameter",default=10)
     #parser.add_option("--conn",type="string", dest="conn", help="How to connect the artificial node to the interactome: 1 to all nodes in the interactome, 2 to all node in the interactome, except the terminals, 3 to a given set of nodes in the interactome, 4 to a given set of nodes in the interactome, except the terminals.")
     #parser.add_option("--stppath", type="string", dest="stppath", help="This path points to the directory where the stp file is available.")

@@ -254,7 +254,7 @@ def RunMSGAlgorithm(msgpath, D, w, b, outputpath, stpfile, connectiontype, input
     with open(resultfilename, "w") as resultFile:
         with open(objectivefilename, "w") as objFile:
             # Start a subprocess with a 1 line buffer size
-            subprocArgs = ["%s/msgsteiner9" % msgpath, "-d", D, "-t", "1000000", "-o", "-r", "1e-5", "-g", "1e-3", "-j", str(threads)]
+            subprocArgs = ["%s" % msgpath, "-d", D, "-t", "1000000", "-o", "-r", "1e-5", "-g", "1e-3", "-j", str(threads)]
             subproc = subprocess.Popen(subprocArgs, bufsize=1, stdin=subprocess.PIPE, stdout=resultFile, stderr=objFile)
             for line in inputData:
                 subproc.stdin.write(line) # Lines are already newline terminated
