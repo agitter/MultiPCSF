@@ -13,6 +13,11 @@ multi-sample feature introduced by Multi-PCSF.  The Omics Integrator website
 describes how to install the [msgsteiner] dependency, which is also required
 by Multi-PCSF.
 
+## Example
+BreastCancer.sh in the scripts subdirectory provides an example of how to run
+Multi-PCSF.  Before running the script, the `msgpath` variable must be set to
+the location of the msgsteiner executable, including the file name.
+
 ## Data
 The breast cancer tumor sample data and protein-protein interaction network
 data described in the Multi-PCSF manuscript are provided as an example

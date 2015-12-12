@@ -626,7 +626,7 @@ def CreateParser():
     parser.add_option("--iterations", type="int", dest="iterations", help="The number of iterations to run", default=10)
     parser.add_option("--lambda1", type="float", dest="lambda1",help="The tradeoff coefficient for the penalty incurred by nodes in the Steiner forests that are not in the set of common nodes.",default=1.0)
     # Redefine lambda2 in terms of how many trees should contain a node before you include it in the common set?
-    parser.add_option("--lambda2", type="float", dest="lambda2",help="The tradeoff coefficient for the reward on the size of the set of common nodes when using unweighted artificial prizes or the power to which the node frequency is taken (called alpha elsewhere) for weighted prizes.",default=1.0)
+    parser.add_option("--lambda2", type="float", dest="lambda2",help="The tradeoff coefficient for the reward on the size of the set of common nodes when using unweighted artificial prizes or the power to which the node frequency is taken (called alpha in the manuscript) for weighted prizes.",default=1.0)
     # Non-positive values will map to cpu_count()
     parser.add_option("--workers", type="int", dest="workers", help="The number of worker processes to use in the multiprocessing pool or threads to use in multi-threaded belief propagation.  Should not exceed the number of cores available.  Defaults to the number of CPUs.", default=-1)
     # Use positive or negative artificial prizes to encourage use of the common set or weighted prizes to avoid
