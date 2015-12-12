@@ -461,7 +461,8 @@ def LearnSteinerHelper(args):
 # TODO call the Python function directly instead of using a system call
 def LearnSteiner(opts, stpPath, outPath, sampleName, targetFile, threads):
     print "Learning Steiner forest for %s" % sampleName
-    os.system("python PCSF.py --outputpath=%s --msgpath=%s --depth=%d --conn=3 --targetfile=%s --stppath=%s/ --stpfile=%s --W=%s_%s_%s --beta=1.0_1.0_1.0 --exclude=2 --species=human --threads=%s" % (outPath, opts.msgPath, opts.depth, targetFile, stpPath, sampleName, str(opts.W), str(opts.W), str(opts.W), str(threads)))
+    pyFile = os.path.join(os.path.dirname(__file__),"PCSF.py")
+    os.system("python %s --outputpath=%s --msgpath=%s --depth=%d --conn=3 --targetfile=%s --stppath=%s/ --stpfile=%s --W=%s_%s_%s --beta=1.0_1.0_1.0 --exclude=2 --species=human --threads=%s" % (pyFile, outPath, opts.msgPath, opts.depth, targetFile, stpPath, sampleName, str(opts.W), str(opts.W), str(opts.W), str(threads)))
 
 
 # Find and return a set of the potential Steiner nodes, the non-prize
@@ -499,7 +500,8 @@ def CreateStpHelper(args):
 def CreateStp(opts, initPath, terminalFile, sampleName):
     stpFile = sampleName + ".stp"
     print "Creating %s" % stpFile
-    os.system("python MessagePassingInput.py --interactomepath=%s --terminalpath=%s --resultpath=%s --indirectedfilename=%s --beta=%f --terminalfile=%s --resultfilename=%s --directedfilename=%s --tfdnafilename=%s --mrnabeta=%s" % (opts.interactomePath, opts.terminalPath, initPath, opts.undirectedFile, opts.beta, terminalFile, stpFile, opts.directedFile, opts.tfdnaFile, opts.mrnaBeta))
+    pyFile = os.path.join(os.path.dirname(__file__),"MessagePassingInput.py")
+    os.system("python %s --interactomepath=%s --terminalpath=%s --resultpath=%s --indirectedfilename=%s --beta=%f --terminalfile=%s --resultfilename=%s --directedfilename=%s --tfdnafilename=%s --mrnabeta=%s" % (pyFile, opts.interactomePath, opts.terminalPath, initPath, opts.undirectedFile, opts.beta, terminalFile, stpFile, opts.directedFile, opts.tfdnaFile, opts.mrnaBeta))
     return stpFile
 
 
@@ -624,9 +626,9 @@ def CreateParser():
 
     # Fix the number of iterations until other convergence criteria is implemented
     parser.add_option("--iterations", type="int", dest="iterations", help="The number of iterations to run", default=10)
-    parser.add_option("--lambda1", type="float", dest="lambda1",help="The tradeoff coefficient for the penalty incurred by nodes in the Steiner forests that are not in the set of common nodes.",default=1.0)
+    parser.add_option("--lambda", type="float", dest="lambda1",help="The tradeoff coefficient for the penalty incurred by nodes in the Steiner forests that are not in the set of common nodes.",default=1.0)
     # Redefine lambda2 in terms of how many trees should contain a node before you include it in the common set?
-    parser.add_option("--lambda2", type="float", dest="lambda2",help="The tradeoff coefficient for the reward on the size of the set of common nodes when using unweighted artificial prizes or the power to which the node frequency is taken (called alpha in the manuscript) for weighted prizes.",default=1.0)
+    parser.add_option("--alpha", type="float", dest="lambda2",help="The tradeoff coefficient for the reward on the size of the set of common nodes when using unweighted artificial prizes or the power to which the node frequency is taken for weighted prizes.",default=1.0)
     # Non-positive values will map to cpu_count()
     parser.add_option("--workers", type="int", dest="workers", help="The number of worker processes to use in the multiprocessing pool or threads to use in multi-threaded belief propagation.  Should not exceed the number of cores available.  Defaults to the number of CPUs.", default=-1)
     # Use positive or negative artificial prizes to encourage use of the common set or weighted prizes to avoid
