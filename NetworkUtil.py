@@ -36,7 +36,7 @@ def LoadGraphiteNetwork(networkFile):
                 graph.add_edge(edgeParts[0], edgeParts[1])
     return graph
 
-# Load an interaciton network as an undirected graph and calculate
+# Load an interaction network as an undirected graph and calculate
 # a penalty (negative prize) for each node.  The penalty is
 # -mu * degree.  If mu <= 0 then return an empty dictionary.
 def DegreePenalties(mu, undirNetworkFile, dirNetworkFile):
