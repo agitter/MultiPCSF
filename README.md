@@ -3,6 +3,8 @@
 [msgsteiner]: http://areeweb.polito.it/ricerca/cmp/code/bpsteiner
 [TCGA 2012]: http://www.nature.com/nature/journal/v490/n7418/full/nature11412.html
 [Szklarczyk et al 2011]: http://nar.oxfordjournals.org/content/39/suppl_1/D561.long
+[TCGA]: http://cancergenome.nih.gov/publications/publicationguidelines
+[STRING]: http://string-db.org/newstring_cgi/show_download_page.pl
 
 # Multi-PCSF
 An implementation of the Multi-PCSF algorithm described in [Gitter et al 2014].
@@ -24,7 +26,7 @@ data described in the Multi-PCSF manuscript are provided as an example
 dataset.  If you use these data in a manuscript, cite [TCGA 2012] for
 the breast cancer data and [Szklarczyk et al 2011] for the STRING
 protein-protein interaction network and see their respective websites
-for the terms of use.
+([TCGA], [STRING]) for the terms of use.
 
 ## Usage
 Only the most commonly used options are described below.  Use
