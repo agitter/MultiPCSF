@@ -35,7 +35,6 @@ CMD="python ../ConstrainedMultiSample.py \
             --iterations=$iterations \
             --lambda=$lambda \
             --alpha=$alpha \
-            --workers=$workers \
             --artificialprizes=$artificialprizes \
             --dummyneighbors=$dummyneighbors \
             --itermode=$itermode \
