@@ -225,10 +225,7 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
     inputData.extend(terminals)
     inputData.append("W %s 100.0\n" % artificial)
     inputData.append("R %s\n\n" % artificial)
-    file = open("%s/gbm_cell_line.attr" % outputpath,"w")
-    for t in terminalset:
-        file.writelines(t+' = 1\n')
-    file.close()
+
     print "Input Data Prepared: w = %s, b = %s, connectiontype = %s" % (w, b, connectiontype)
     return inputData
 
