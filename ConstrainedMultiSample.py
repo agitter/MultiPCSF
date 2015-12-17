@@ -600,21 +600,20 @@ def CreateParser():
     # Species
     # W cannot be given as a range of values
     parser = OptionParser()
-    parser.add_option("--interactomepath", type="string", dest="interactomePath", help="This path points to the directory where all interaction files are deposited (i.e., protein-protein interactions, kinase-substrate interactions, transcription factor-DNA interactions)",default='None')
-    parser.add_option("--terminalpath",type="string",dest="terminalPath",help="This path points to the directory where the terminal files are deposited.",default='None')
-    parser.add_option("--resultpath",type="string",dest="resultPath",help="This path points to the directory where the outputs will be located.",default='None')
-    parser.add_option("--undirectedfile",type="string",dest="undirectedFile",help="The name of the interaction file where protein-protein interaction data with probabilistic weights (e.g in [0,1]) are available. Columns should be ordered [prot1 prot2 weight].",default='None')
-    parser.add_option("--beta",type="float",dest="beta",help="Beta parameter given here is to scale node penalties of protein terminals to the edge costs.  This scaling is only performed once when the initial stp files are created.",default=1.0)
-    parser.add_option("--terminalfile",type="string",dest="masterTerminalFile",help="A file in terminalpath that lists the files that give the node prizes for each sample.  All listed filenames should be relative to terminal path.  If gene penalties are given in the terminal files, gene names should end with '_MRNA'.  Optinonally can include a tab-separated second column that assigns each sample to a group so the forests are only constrained to be similar to other samples in the same group.",default='None')
+    parser.add_option("--interactomepath", type="string", dest="interactomePath", help="This path points to the directory that contains the interaction network files",default='None')
+    parser.add_option("--terminalpath",type="string",dest="terminalPath",help="This path points to the directory that contains the terminal (node prize) files",default='None')
+    parser.add_option("--resultpath",type="string",dest="resultPath",help="This path points to the directory where the output files will be written.",default='None')
+    parser.add_option("--undirectedfile",type="string",dest="undirectedFile",help="The name of the protein-protein interaction file in the interactomepath directory.  The file is expected to contain undirected interactions with probabilistic weights (e.g in [0,1]). Columns should be ordered [prot1 prot2 weight].",default='None')
+    parser.add_option("--terminalfile",type="string",dest="masterTerminalFile",help="A file in the terminalpath directory that lists the files that give the node prizes for each sample.  All listed filenames should be relative to terminal path.  If gene penalties are given in the terminal files, gene names should end with '_MRNA'.  Optionally can include a tab-separated second column that assigns each sample to a group so the forests are only constrained to be similar to other samples in the same group.",default='None')
     #parser.add_option("--resultfilename",type="string",dest="resultfilename",help="The name of the file where the combined information will be written to be used as input in the message passing tool.",default='None')
-    parser.add_option("--directedfile",type="string",dest="directedFile",help="Optional: The name of the interaction file where directed interactions (i.e. kinase-substrate) with probabilistic weights are available.  Columns should be ordered [substrate kinase weight].",default='None')
+    parser.add_option("--directedfile",type="string",dest="directedFile",help="Optional: The name of the interaction file where directed interactions (e.g. kinase-substrate) with probabilistic weights are available.  Columns should be ordered [substrate kinase weight].",default='None')
     parser.add_option("--tfdnafile",type="string",dest="tfdnaFile",help="Optional: The name of the interaction file where TF-DNA interactions with probabilistic weights are available. Columns should be ordered [TF gene weight].  Gene names should not end with '_MRNA' because '_MRNA' is automatically appended to them.",default='None')
     parser.add_option("--mrnabeta",type="string",dest="mrnaBeta",help="Optional: The beta parameter for gene terminal nodes. Its default value is equal to the --beta value.  It is applied to all terminals whose name ends with '_MRNA'.  The scaling is only performed once when the initial stp files are created.",default='None')
 
 
     #parser.add_option("--outputpath", type="string", dest="outputpath", help="This path points to the directory where the output files will be written",default='None')
     parser.add_option("--msgpath",type="string",dest="msgPath",help="The path and file name of the msgsteiner executable",default='./msgsteiner')
-    parser.add_option("--depth",type="int",dest="depth",help="Depth parameter",default=10)
+    parser.add_option("--depth",type="int",dest="depth",help="Depth parameter that limits the maximum depth from the Steiner tree root to the leaves",default=10)
     #parser.add_option("--conn",type="string", dest="conn", help="How to connect the artificial node to the interactome: 1 to all nodes in the interactome, 2 to all node in the interactome, except the terminals, 3 to a given set of nodes in the interactome, 4 to a given set of nodes in the interactome, except the terminals.")
     #parser.add_option("--stppath", type="string", dest="stppath", help="This path points to the directory where the stp file is available.")
     #parser.add_option("--stpfile", type="string", dest="stpfile", help="The name of the stp file (without the file extension)")
@@ -624,11 +623,13 @@ def CreateParser():
     #parser.add_option("--targetfile", type="string", dest="targetfile", help="a subset of the proteins in the interactome that will be connected to the artificial root in connection types 3 and 4",default='None')
     #parser.add_option("--species", type="string", dest="species", help="the organism that you are working on",default='None')
 
-    # Fix the number of iterations until other convergence criteria is implemented
-    parser.add_option("--iterations", type="int", dest="iterations", help="The number of iterations to run", default=10)
+    parser.add_option("--beta",type="float",dest="beta",help="The scaling factor applied to the node prizes, which is used to control the relative strength of node prizes and edge costs.  This scaling is only performed once when the initial stp files are created.",default=1.0)
     parser.add_option("--lambda", type="float", dest="lambda1",help="The tradeoff coefficient for the penalty incurred by nodes in the Steiner forests that are not in the set of common nodes.",default=1.0)
     # Redefine lambda2 in terms of how many trees should contain a node before you include it in the common set?
     parser.add_option("--alpha", type="float", dest="lambda2",help="The tradeoff coefficient for the reward on the size of the set of common nodes when using unweighted artificial prizes or the power to which the node frequency is taken for weighted prizes.",default=1.0)
+    parser.add_option("--mu", type="float", dest="mu", default=0, help="A parameter used to penalize high-degree nodes from being selected as Steiner nodes.  Does not affect prize nodes but does affect artificial prizes.  The penalty is -mu*degree.  Set mu <= 0 to disable the penalty (default).")
+    # Fix the number of iterations until other convergence criteria is implemented
+    parser.add_option("--iterations", type="int", dest="iterations", help="The number of iterations to run", default=10)
     # Non-positive values will map to cpu_count()
     parser.add_option("--workers", type="int", dest="workers", help="The number of worker processes to use in the multiprocessing pool or threads to use in multi-threaded belief propagation.  Should not exceed the number of cores available.  Defaults to the number of CPUs.", default=-1)
     # Use positive or negative artificial prizes to encourage use of the common set or weighted prizes to avoid
@@ -637,7 +638,6 @@ def CreateParser():
     # Determine how to connect the dummy node
     parser.add_option("--dummyneighbors", type="choice", dest="dummyNeighbors", default="prizes", choices=["prizes", "nonprizes"], help="Connect the dummy node to all 'prizes' (default) or 'nonprizes'.")
     parser.add_option("--itermode", type="choice", dest="iterMode", default="batch", choices=["batch", "random"], help="Learn forests simultaneously in 'batch' (default) or sequentially in 'random' order.  Batch mode computes artificial prizes with respect to all forests at the previous iteration.  Random mode computes prizes for a specific sample given the most recent forests for all other samples.")
-    parser.add_option("--mu", type="float", dest="mu", default=0, help="A parameter used to penalize high-degree nodes from being selected as Steiner nodes.  Does not affect prize nodes but does affect artificial prizes.  The penalty is -mu*degree.  Set mu <= 0 to disable the penalty (default).")
     return parser
 
 

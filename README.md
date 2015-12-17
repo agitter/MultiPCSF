@@ -27,62 +27,48 @@ protein-protein interaction network and see their respective websites
 for the terms of use.
 
 ## Usage
+Only the most commonly used options are described below.  Use
+`python ConstrainedMultiSample.py -h` to view the complete usage message.
+See the provided example data for file formatting guidelines.
 ```
 Usage: ConstrainedMultiSample.py [options]
 
 Options:
   -h, --help            show this help message and exit
   --interactomepath=INTERACTOMEPATH
-                        This path points to the directory where all
-                        interaction files are deposited (i.e., protein-protein
-                        interactions, kinase-substrate interactions,
-                        transcription factor-DNA interactions)
+                        This path points to the directory that contains the
+                        interaction network files
   --terminalpath=TERMINALPATH
-                        This path points to the directory where the terminal
-                        files are deposited.
+                        This path points to the directory that contains the
+                        terminal (node prize) files
   --resultpath=RESULTPATH
-                        This path points to the directory where the outputs
-                        will be located.
+                        This path points to the directory where the output
+                        files will be written.
   --undirectedfile=UNDIRECTEDFILE
-                        The name of the interaction file where protein-protein
-                        interaction data with probabilistic weights (e.g in
-                        [0,1]) are available. Columns should be ordered [prot1
-                        prot2 weight].
-  --beta=BETA           Beta parameter given here is to scale node penalties
-                        of protein terminals to the edge costs.  This scaling
-                        is only performed once when the initial stp files are
-                        created.
+                        The name of the protein-protein interaction file in
+                        the interactomepath directory.  The file is expected
+                        to contain undirected interactions with probabilistic
+                        weights (e.g in [0,1]). Columns should be ordered
+                        [prot1 prot2 weight].
   --terminalfile=MASTERTERMINALFILE
-                        A file in terminalpath that lists the files that give
-                        the node prizes for each sample.  All listed filenames
-                        should be relative to terminal path.  If gene
-                        penalties are given in the terminal files, gene names
-                        should end with '_MRNA'.  Optinonally can include a
-                        tab-separated second column that assigns each sample
-                        to a group so the forests are only constrained to be
-                        similar to other samples in the same group.
-  --directedfile=DIRECTEDFILE
-                        Optional: The name of the interaction file where
-                        directed interactions (i.e. kinase-substrate) with
-                        probabilistic weights are available.  Columns should
-                        be ordered [substrate kinase weight].
-  --tfdnafile=TFDNAFILE
-                        Optional: The name of the interaction file where TF-
-                        DNA interactions with probabilistic weights are
-                        available. Columns should be ordered [TF gene weight].
-                        Gene names should not end with '_MRNA' because '_MRNA'
-                        is automatically appended to them.
-  --mrnabeta=MRNABETA   Optional: The beta parameter for gene terminal nodes.
-                        Its default value is equal to the --beta value.  It is
-                        applied to all terminals whose name ends with '_MRNA'.
-                        The scaling is only performed once when the initial
-                        stp files are created.
+                        A file in the terminalpath directory that lists the
+                        files that give the node prizes for each sample.  All
+                        listed filenames should be relative to terminal path.
+                        If gene penalties are given in the terminal files,
+                        gene names should end with '_MRNA'.  Optionally can
+                        include a tab-separated second column that assigns
+                        each sample to a group so the forests are only
+                        constrained to be similar to other samples in the same
+                        group.
   --msgpath=MSGPATH     The path and file name of the msgsteiner executable
-  --depth=DEPTH         Depth parameter
+  --depth=DEPTH         Depth parameter that limits the maximum depth from the
+                        Steiner tree root to the leaves
   --W=W                 The cost of the edges from the artificial root node to
                         its neighbors.
-  --iterations=ITERATIONS
-                        The number of iterations to run
+  --beta=BETA           The scaling factor applied to the node prizes, which
+                        is used to control the relative strength of node
+                        prizes and edge costs.  This scaling is only performed
+                        once when the initial stp files are created.
   --lambda=LAMBDA1      The tradeoff coefficient for the penalty incurred by
                         nodes in the Steiner forests that are not in the set
                         of common nodes.
@@ -90,6 +76,13 @@ Options:
                         the set of common nodes when using unweighted
                         artificial prizes or the power to which the node
                         frequency is taken for weighted prizes.
+  --mu=MU               A parameter used to penalize high-degree nodes from
+                        being selected as Steiner nodes.  Does not affect
+                        prize nodes but does affect artificial prizes.  The
+                        penalty is -mu*degree.  Set mu <= 0 to disable the
+                        penalty (default).
+  --iterations=ITERATIONS
+                        The number of iterations to run
   --workers=WORKERS     The number of worker processes to use in the
                         multiprocessing pool or threads to use in multi-
                         threaded belief propagation.  Should not exceed the
@@ -110,11 +103,6 @@ Options:
                         previous iteration.  Random mode computes prizes for a
                         specific sample given the most recent forests for all
                         other samples.
-  --mu=MU               A parameter used to penalize high-degree nodes from
-                        being selected as Steiner nodes.  Does not affect
-                        prize nodes but does affect artificial prizes.  The
-                        penalty is -mu*degree.  Set mu <= 0 to disable the
-                        penalty (default).
 ```
 
 ## Developers
