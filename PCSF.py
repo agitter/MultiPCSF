@@ -17,10 +17,6 @@ def sort_table(table, cols):
         table = sorted(table, key=operator.itemgetter(col))
     return table
 
-# No longer supported
-def idmatchHuman(species):
-    return dict()
-
 # Return a list of all unique receptors in the file
 def givenset(stppath,targetfile):
     artificialTargets = set()
@@ -71,7 +67,6 @@ def givenset_terminalexcluded(stppath, targetfile, stpfile):
 def ReceptomeRanking(stppath,stpfile,targetfile,species):
     G = networkx.Graph()
     receptorDegree = []
-    idfile = idmatchHuman(species)
     file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
     nodelist = givenset(stppath, targetfile)
     while 1:
@@ -85,10 +80,7 @@ def ReceptomeRanking(stppath,stpfile,targetfile,species):
 
     for node in nodelist:
         deg = networkx.degree(G,node)
-        try:
-            nodename = idfile[node]
-        except KeyError:
-            nodename = [node]
+        nodename = [node]
         if deg != {} and deg != 0 and deg != []:
             receptorDegree.append([nodename, deg])
     sortedlist = sort_table(receptorDegree, [1,1])
@@ -233,15 +225,9 @@ def PrepareInputFile(stppath,stpfile,connectiontype, outputpath, w, b, D, knocko
     inputData.extend(terminals)
     inputData.append("W %s 100.0\n" % artificial)
     inputData.append("R %s\n\n" % artificial)
-    idfile = idmatchHuman(species)
     file = open("%s/gbm_cell_line.attr" % outputpath,"w")
     for t in terminalset:
-        try: 
-            sym_tlist = idfile[t]
-            for sym_t  in sym_tlist:
-                file.writelines(sym_t+' = 1\n')
-        except KeyError:
-            file.writelines(t+' = 1\n')
+        file.writelines(t+' = 1\n')
     file.close()
     print "Input Data Prepared: w = %s, b = %s, connectiontype = %s" % (w, b, connectiontype)
     return inputData
@@ -346,7 +332,6 @@ def SteinerTree(resultpath, resultfilename):
 # Returns all, undirected, and directed edges between members of the connected components
 # of the forest
 def NetworkMapping(outputpath, stppath, stpfile, w, b, D,species):
-    idfile = idmatchHuman(species)
     # The directed and undirected edges in the orginal stp file, with weights
     G1 = networkx.Graph()
     G2 = networkx.DiGraph()
@@ -420,7 +405,6 @@ def NetworkMapping(outputpath, stppath, stpfile, w, b, D,species):
 # Writes the pairs of nodes in the message passing output
 # Does not do the mapping presently
 def sifidConverter(outputpath, stpfile, w, b, D, species):
-    idfile = idmatchHuman(species)
     inputfile = "%s/%s_%s_%s_%s.txt" % (outputpath, stpfile, str(w), str(b),str(D))
     symbolfilename = "%s/symbol_%s_%s_%s_%s.txt" % (outputpath, stpfile, str(w), str(b), str(D))
     file = open(inputfile,'r')
