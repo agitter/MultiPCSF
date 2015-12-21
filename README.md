@@ -107,6 +107,39 @@ Options:
                         other samples.
 ```
 
+## Output
+Several subdirectories are created in the directory specified by the
+`--resultpath` argument.  The `initial` and `itr*` directories (one for each
+of the iterations specified by the `--iterations` argument) provide detailed
+information about intermediate results.  Except for the last `itr*` directory,
+these can typically be deleted after MultiPCSF terminates.  The location of
+the Multi-PCSF output depends on the settings that were used.
+
+If `--artificialprizes` was set to one of the negative prize options or only
+one iteration was run, the output networks are in the last `itr*`
+directory.  If positive artificial prizes were used, a post-processing
+pruning step is executed.  This runs the Steiner forest algorithm once more
+for each sample to prune nodes in the network that are do not connect
+real prize nodes to the forest but rather were included only due to their
+positive artificial prizes.  In this case, the output networks are in the
+`final` directory.
+
+The output directory contains intermediate files and the following files that
+are most useful for interpreting and visualizing the networks.  For each
+input file <sample> listed in the `--terminalfile` input file there will
+be an output file:
+* `symbol_fullnetwork_<sample>_<options>.txt` - <sample> is the input sample
+name and <options> are the values of the `W`, `beta`, and `depth` arguments.
+This tab-separated file contains a line for each edge in the output network,
+where each line provides the names of the interacting proteins.  The artificial
+root node has been removed.
+* <sample>_<options>.output - A summary of the Steiner forest produced.
+* <sample>_<options>.objective - Output messages from the msgsteiner program,
+including optimization progress.
+
+The other files are intermediate files used to create the input for msgsteiner
+or prepare the output network file from the msgsteiner output.
+
 ## Developers
 * Nurcan Tuncbag
 * Anthony Gitter
