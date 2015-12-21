@@ -20,7 +20,7 @@ def main(argList):
     parser = CreateParser()
     (opts, args) = parser.parse_args(argList)
 
-    print "Starting constrained multi-patient Steiner forest %s" % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
+    print "Starting constrained multi-sample Steiner forest %s" % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
     print "Parameters: %s" % opts
 
 
