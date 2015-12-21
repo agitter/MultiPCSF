@@ -188,7 +188,7 @@ def main(argList):
         zippedArgs = itertools.izip(itertools.repeat(opts), itertools.repeat(finalPath), itertools.repeat(finalPath),  sampleNames, dummyNeighborFiles, itertools.repeat(1))
         pool.map(LearnSteinerHelper, zippedArgs)
 
-    print "Finishing constrained multi-patient Steiner forest %s" % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
+    print "Finishing constrained multi-sample Steiner forest %s" % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
 
     pool.close()
 
