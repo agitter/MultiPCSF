@@ -62,37 +62,6 @@ def givenset_terminalexcluded(stppath, targetfile, stpfile):
             continue
     return artificialTargets
 
-# Rank receptors (named in targetfile) by their degree in the network
-# in stpfile
-def ReceptomeRanking(stppath,stpfile,targetfile,species):
-    G = networkx.Graph()
-    receptorDegree = []
-    file = open(os.path.join(stppath,"%s.stp" % stpfile), "r")
-    nodelist = givenset(stppath, targetfile)
-    while 1:
-        line = file.readline()
-        if line == "": break
-        if line.startswith("E") or line.startswith("D"):
-            temp = line.split()
-            node1 = temp[1]
-            node2 = temp[2]
-            G.add_edge(node1,node2)
-
-    for node in nodelist:
-        deg = networkx.degree(G,node)
-        nodename = [node]
-        if deg != {} and deg != 0 and deg != []:
-            receptorDegree.append([nodename, deg])
-    sortedlist = sort_table(receptorDegree, [1,1])
-    index1 = -1
-    dreceptomeRank = {}
-    for i in range(len(sortedlist)):
-        index = index1-i
-        proteins = sortedlist[index][0]
-        for protein in proteins:
-            dreceptomeRank[protein] = i
-    print len(dreceptomeRank)
-    return dreceptomeRank
 
 # Return a set of all nodes in the network
 def allnodes(stppath, stpfile):
