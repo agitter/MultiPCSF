@@ -112,7 +112,7 @@ Several subdirectories are created in the directory specified by the
 `--resultpath` argument.  The `initial` and `itr*` directories (one for each
 of the iterations specified by the `--iterations` argument) provide detailed
 information about intermediate results.  Except for the last `itr*` directory,
-these can typically be deleted after MultiPCSF terminates.
+these can typically be deleted after Multi-PCSF terminates.
 
 The location of the final Multi-PCSF networks depends on the settings.
 If `--artificialprizes` was set to one of the negative prize options or only
@@ -143,3 +143,9 @@ or prepare the output network file from the msgsteiner output.
 ## Developers
 * Nurcan Tuncbag
 * Anthony Gitter
+
+## Acknowledgements
+Portions of the Multi-PCSF software were developed with support from Microsoft
+Research while Anthony Gitter was a postdoctoral researcher there.  We thank
+Microsoft for granting permission to release the code as open source under the
+Sample Code Exception and Paul Oka in particular for coordinating the release.
