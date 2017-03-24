@@ -1,10 +1,10 @@
 [Gitter et al 2014]: http://www.worldscientific.com/doi/abs/10.1142/9789814583220_0005
-[Omics Integrator]: http://fraenkel.mit.edu/omicsintegrator
+[Omics Integrator]: https://github.com/fraenkel-lab/OmicsIntegrator
 [msgsteiner]: http://areeweb.polito.it/ricerca/cmp/code/bpsteiner
 [TCGA 2012]: http://www.nature.com/nature/journal/v490/n7418/full/nature11412.html
 [Szklarczyk et al 2011]: http://nar.oxfordjournals.org/content/39/suppl_1/D561.long
 [TCGA]: http://cancergenome.nih.gov/publications/publicationguidelines
-[STRING]: http://string-db.org/newstring_cgi/show_download_page.pl
+[STRING]: http://string-db.org/cgi/access.pl?footer_active_subpage=licensing
 [Microsoft Research]: https://www.microsoft.com/en-us/research/lab/microsoft-research-new-england/
 
 # Multi-PCSF
