@@ -1,3 +1,6 @@
+# © Copyright 2013 Massachusetts Institute of Technology
+# BSD-2-Clause license https://github.com/agitter/MultiPCSF/blob/master/LICENSE
+
 __author__ = 'Nurcan Tuncbag' # Modified by Anthony Gitter
 
 import os
@@ -11,7 +14,7 @@ from optparse import OptionParser
 def givenset(stppath,targetfile):
     artificialTargets = set()
     file = open(os.path.join(stppath, targetfile),"r")
-    #file = open(stppath+''+targetfile,"r")
+
     while 1:
         line = file.readline()
         if line == "": break
