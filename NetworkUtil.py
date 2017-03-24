@@ -1,4 +1,4 @@
-# © Copyright 2013 Massachusetts Institute of Technology
+# Copyright 2013 Massachusetts Institute of Technology
 # BSD-2-Clause license https://github.com/agitter/MultiPCSF/blob/master/LICENSE
 
 import networkx

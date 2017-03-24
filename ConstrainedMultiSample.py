@@ -1,4 +1,4 @@
-# © Copyright 2013 Massachusetts Institute of Technology
+# Copyright 2013 Massachusetts Institute of Technology
 # BSD-2-Clause license https://github.com/agitter/MultiPCSF/blob/master/LICENSE
 
 from optparse import OptionParser
@@ -11,8 +11,8 @@ import time
 import random
 import NetworkUtil
 
-__author__ = 'Anthony Gitter'
-
+__author__ = "Anthony Gitter"
+__version__ = "0.1.0"
 
 # Iterate between finding a common set of nodes among the samples
 # and learning Steiner forests constrained to use those
@@ -24,6 +24,7 @@ def main(argList):
     (opts, args) = parser.parse_args(argList)
 
     print "Starting constrained multi-sample Steiner forest %s" % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
+    print "Multi-PCSF version %s" % __version__
     print "Parameters: %s" % opts
 
 
@@ -602,7 +603,7 @@ def CreateParser():
     # Beta (only allowed to be set once initially, range of Beta is not supported)
     # Species
     # W cannot be given as a range of values
-    parser = OptionParser()
+    parser = OptionParser(version="Multi-PCSF version %s" % __version__)
     parser.add_option("--interactomepath", type="string", dest="interactomePath", help="This path points to the directory that contains the interaction network files",default='None')
     parser.add_option("--terminalpath",type="string",dest="terminalPath",help="This path points to the directory that contains the terminal (node prize) files",default='None')
     parser.add_option("--resultpath",type="string",dest="resultPath",help="This path points to the directory where the output files will be written.",default='None')
