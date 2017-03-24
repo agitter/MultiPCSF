@@ -5,10 +5,13 @@
 [Szklarczyk et al 2011]: http://nar.oxfordjournals.org/content/39/suppl_1/D561.long
 [TCGA]: http://cancergenome.nih.gov/publications/publicationguidelines
 [STRING]: http://string-db.org/newstring_cgi/show_download_page.pl
+[Microsoft Research]: https://www.microsoft.com/en-us/research/lab/microsoft-research-new-england/
 
 # Multi-PCSF
-An implementation of the Multi-PCSF algorithm described in [Gitter et al 2014].
-This is an early, rough version of the PCSF code and is no longer under active
+This repository contains an implementation of the multi-sample prize-collecting
+Steiner forest (Multi-PCSF) algorithm described in [Gitter et al 2014].
+This version of the PCSF code is provided for reproducibility of the results in
+the manuscript but is no longer under active
 development.  Please see [Omics Integrator] for the current version of PCSF
 from Ernest Fraenkel's lab.  However, Omics Integrator does not yet support the
 multi-sample feature introduced by Multi-PCSF.  The Omics Integrator website
@@ -16,7 +19,7 @@ describes how to install the [msgsteiner] dependency, which is also required
 by Multi-PCSF.
 
 ## Example
-BreastCancer.sh in the scripts subdirectory provides an example of how to run
+`BreastCancer.sh` in the scripts subdirectory provides an example of how to run
 Multi-PCSF.  Before running the script, the `msgpath` variable must be set to
 the location of the msgsteiner executable, including the file name.
 
@@ -31,7 +34,8 @@ protein-protein interaction network and see their respective websites
 ## Usage
 Only the most commonly used options are described below.  Use
 `python ConstrainedMultiSample.py -h` to view the complete usage message.
-See the provided example data for file formatting guidelines.
+See the provided example data for file formatting guidelines.  Please
+open an issue with any usage questions.
 ```
 Usage: ConstrainedMultiSample.py [options]
 
@@ -128,24 +132,31 @@ The output directory contains intermediate files and the following files that
 are most useful for interpreting and visualizing the networks.  For each
 input file `<sample>` listed in the `--terminalfile` input file, several
 output files will be created:
-* `symbol_fullnetwork_<sample>_<options>.txt` - `<sample>` is the input sample
+* `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is the input sample
 name and `<options>` are the values of the `W`, `beta`, and `depth` arguments.
 This tab-separated file contains a line for each edge in the output network,
 where each line provides the names of the interacting proteins.  The artificial
 root node has been removed.
-* `<sample>_<options>.output` - Summary statistics of the Steiner forest produced.
-* `<sample>_<options>.objective` - Output messages from the msgsteiner program,
+* `<sample>_<options>.output`: Summary statistics of the Steiner forest produced.
+* `<sample>_<options>.objective`: Output messages from the msgsteiner program,
 including optimization progress.
 
 The other files are intermediate files used to create the input for msgsteiner
 or prepare the output network file from the msgsteiner output.
+
+## Roadmap
+* Implement multi-sample functionality in Omics Integrator
+* Add simulation code to generate prizes from known or synthetic pathways
+* Document support for distinct groups of samples
 
 ## Developers
 * Nurcan Tuncbag
 * Anthony Gitter
 
 ## Acknowledgements
-Portions of the Multi-PCSF software were developed with support from Microsoft
-Research while Anthony Gitter was a postdoctoral researcher there.  We thank
+Portions of the Multi-PCSF software were developed with support from [Microsoft
+Research] while Anthony Gitter was a postdoctoral researcher there.  We thank
 Microsoft for granting permission to release the code as open source under the
 Sample Code Exception and Paul Oka in particular for coordinating the release.
+We acknowledge all authors of [Gitter et al 2014] for their role in the
+algorithm development.
