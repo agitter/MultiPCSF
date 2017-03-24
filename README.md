@@ -8,6 +8,8 @@
 [Microsoft Research]: https://www.microsoft.com/en-us/research/lab/microsoft-research-new-england/
 
 # Multi-PCSF
+[![DOI](https://zenodo.org/badge/47654267.svg)](https://zenodo.org/badge/latestdoi/47654267)
+
 This repository contains an implementation of the multi-sample prize-collecting
 Steiner forest (Multi-PCSF) algorithm described in [Gitter et al 2014].
 This version of the PCSF code is provided for reproducibility of the results in
