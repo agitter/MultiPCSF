@@ -145,7 +145,7 @@ or prepare the output network file from the msgsteiner output.
 ## Simulation
 The `simulation` subdirectory contains the code that was used to simulate
 input samples from synthetic or real pathways.  This code currently serves as
-extended documentation and is not runnable.  It uses and old version of
+extended documentation and is not runnable.  It uses an old version of
 `ConstrainedMultiSample.py` and needs to be updated to use the refactored
 version, which accepts different command line arguments.
 
