@@ -11,14 +11,13 @@
 [![DOI](https://zenodo.org/badge/47654267.svg)](https://zenodo.org/badge/latestdoi/47654267)
 
 This repository contains an implementation of the multi-sample prize-collecting
-Steiner forest (Multi-PCSF) algorithm described in [Gitter et al 2014].
-This version of the PCSF code is provided for reproducibility of the results in
-the manuscript but is no longer under active
-development.  Please see [Omics Integrator] for the current version of PCSF
-from Ernest Fraenkel's lab.  However, Omics Integrator does not yet support the
-multi-sample feature introduced by Multi-PCSF.  The Omics Integrator website
-describes how to install the [msgsteiner] dependency, which is also required
-by Multi-PCSF.
+Steiner forest (Multi-PCSF) algorithm described in [Gitter et al 2014]. This
+version of the PCSF code is provided for reproducibility of the results in the
+manuscript but is no longer under active development.  Please see [Omics
+Integrator] for the current version of PCSF from Ernest Fraenkel's lab.
+However, Omics Integrator does not yet support the multi-sample feature
+introduced by Multi-PCSF.  The Omics Integrator website describes how to install
+the [msgsteiner] dependency, which is also required by Multi-PCSF.
 
 ## Example
 `BreastCancer.sh` in the scripts subdirectory provides an example of how to run
@@ -26,18 +25,17 @@ Multi-PCSF.  Before running the script, the `msgpath` variable must be set to
 the location of the msgsteiner executable, including the file name.
 
 ## Data
-The breast cancer tumor sample data and protein-protein interaction network
-data described in the Multi-PCSF manuscript are provided as an example
-dataset.  If you use these data in a manuscript, cite [TCGA 2012] for
-the breast cancer data and [Szklarczyk et al 2011] for the STRING
-protein-protein interaction network and see their respective websites
-([TCGA], [STRING]) for the terms of use.
+The breast cancer tumor sample data and protein-protein interaction network data
+described in the Multi-PCSF manuscript are provided as an example dataset.  If
+you use these data in a manuscript, cite [TCGA 2012] for the breast cancer data
+and [Szklarczyk et al 2011] for the STRING protein-protein interaction network
+and see their respective websites ([TCGA], [STRING]) for the terms of use.
 
 ## Usage
-Only the most commonly used options are described below.  Use
-`python ConstrainedMultiSample.py -h` to view the complete usage message.
-See the provided example data for file formatting guidelines.  Please
-open an issue with any usage questions.
+Only the most commonly used options are described below.  Use `python
+ConstrainedMultiSample.py -h` to view the complete usage message. See the
+provided example data for file formatting guidelines.  Please open an issue with
+any usage questions.
 ```
 Usage: ConstrainedMultiSample.py [options]
 
@@ -115,40 +113,45 @@ Options:
 
 ## Output
 Several subdirectories are created in the directory specified by the
-`--resultpath` argument.  The `initial` and `itr*` directories (one for each
-of the iterations specified by the `--iterations` argument) provide detailed
+`--resultpath` argument.  The `initial` and `itr*` directories (one for each of
+the iterations specified by the `--iterations` argument) provide detailed
 information about intermediate results.  Except for the last `itr*` directory,
 these can typically be deleted after Multi-PCSF terminates.
 
-The location of the final Multi-PCSF networks depends on the settings.
-If `--artificialprizes` was set to one of the negative prize options or only
-one iteration was run, the output networks are in the last `itr*`
-directory.  If positive artificial prizes were used, a post-processing
-pruning step is executed.  This runs the Steiner forest algorithm once more
-for each sample to prune nodes in the network that do not connect
-real prize nodes to the forest but rather were included only due to their
-positive artificial prizes.  In this case, the output networks are in the
-`final` directory.
+The location of the final Multi-PCSF networks depends on the settings. If
+`--artificialprizes` was set to one of the negative prize options or only one
+iteration was run, the output networks are in the last `itr*` directory.  If
+positive artificial prizes were used, a post-processing pruning step is
+executed.  This runs the Steiner forest algorithm once more for each sample to
+prune nodes in the network that do not connect real prize nodes to the forest
+but rather were included only due to their positive artificial prizes.  In this
+case, the output networks are in the `final` directory.
 
 The output directory contains intermediate files and the following files that
-are most useful for interpreting and visualizing the networks.  For each
-input file `<sample>` listed in the `--terminalfile` input file, several
-output files will be created:
-* `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is the input sample
-name and `<options>` are the values of the `W`, `beta`, and `depth` arguments.
-This tab-separated file contains a line for each edge in the output network,
-where each line provides the names of the interacting proteins.  The artificial
-root node has been removed.
-* `<sample>_<options>.output`: Summary statistics of the Steiner forest produced.
-* `<sample>_<options>.objective`: Output messages from the msgsteiner program,
+are most useful for interpreting and visualizing the networks.  For each input
+file `<sample>` listed in the `--terminalfile` input file, several output files
+will be created: * `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is
+the input sample name and `<options>` are the values of the `W`, `beta`, and
+`depth` arguments. This tab-separated file contains a line for each edge in the
+output network, where each line provides the names of the interacting proteins.
+The artificial root node has been removed. * `<sample>_<options>.output`:
+Summary statistics of the Steiner forest produced. *
+`<sample>_<options>.objective`: Output messages from the msgsteiner program,
 including optimization progress.
 
 The other files are intermediate files used to create the input for msgsteiner
 or prepare the output network file from the msgsteiner output.
 
+## Simulation
+The `simulation` subdirectory contains the code that was used to simulate
+input samples from synthetic or real pathways.  This code currently serves as
+extended documentation and is not runnable.  It uses and old version of
+`ConstrainedMultiSample.py` and needs to be updated to use the refactored
+version, which accepts different command line arguments.
+
 ## Roadmap
 * Implement multi-sample functionality in Omics Integrator
-* Add simulation code to generate prizes from known or synthetic pathways
+* Refactor simulation code to generate prizes from known or synthetic pathways
 * Document support for distinct groups of samples
 
 ## Developers
