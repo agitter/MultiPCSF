@@ -2,7 +2,6 @@
 # BSD-2-Clause license https://github.com/agitter/MultiPCSF/blob/master/LICENSE
 
 import optparse
-import networkx
 import sys
 import os
 import math

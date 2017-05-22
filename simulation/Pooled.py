@@ -2,13 +2,10 @@
 # BSD-2-Clause license https://github.com/agitter/MultiPCSF/blob/master/LICENSE
 
 from optparse import OptionParser
-import string
 import sys
 import os
 import time
-import random
 import ConstrainedMultiSample
-import NetworkUtil
 
 __author__ = 'Anthony Gitter'
 
@@ -24,7 +21,6 @@ def main(argList):
     print "Parameters: %s" % opts
 
     # TODO Add error checking of inputs
-
 
     # Load all of the proteins in the interactome, ignoring
     # genes.  These are needed if connecting the dummy node to
