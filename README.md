@@ -5,6 +5,8 @@
 [Szklarczyk et al 2011]: http://nar.oxfordjournals.org/content/39/suppl_1/D561.long
 [TCGA]: http://cancergenome.nih.gov/publications/publicationguidelines
 [STRING]: http://string-db.org/cgi/access.pl?footer_active_subpage=licensing
+[Database of Cell Signaling]: http://stke.sciencemag.org/about/help/cm
+[Gough 2002]: https://doi.org/10.1111/j.1749-6632.2002.tb04532.x
 [Microsoft Research]: https://www.microsoft.com/en-us/research/lab/microsoft-research-new-england/
 
 # Multi-PCSF
@@ -30,6 +32,11 @@ described in the Multi-PCSF manuscript are provided as an example dataset.  If
 you use these data in a manuscript, cite [TCGA 2012] for the breast cancer data
 and [Szklarczyk et al 2011] for the STRING protein-protein interaction network
 and see their respective websites ([TCGA], [STRING]) for the terms of use.
+
+The *Science Signaling* Database of Cell Signaling EGFR pathway that was used to
+simulate samples is also provided in the `data` subdirectory.  If you use this
+pathway in a manuscript, cite [Gough 2002] and see the [Database of Cell
+Signaling] website for the terms of use.
 
 ## Usage
 Only the most commonly used options are described below.  Use `python
