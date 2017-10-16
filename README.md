@@ -137,13 +137,14 @@ case, the output networks are in the `final` directory.
 The output directory contains intermediate files and the following files that
 are most useful for interpreting and visualizing the networks.  For each input
 file `<sample>` listed in the `--terminalfile` input file, several output files
-will be created: * `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is
+will be created:
+* `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is
 the input sample name and `<options>` are the values of the `W`, `beta`, and
 `depth` arguments. This tab-separated file contains a line for each edge in the
 output network, where each line provides the names of the interacting proteins.
-The artificial root node has been removed. * `<sample>_<options>.output`:
-Summary statistics of the Steiner forest produced. *
-`<sample>_<options>.objective`: Output messages from the msgsteiner program,
+The artificial root node has been removed.
+* `<sample>_<options>.output`: Summary statistics of the Steiner forest produced.
+* `<sample>_<options>.objective`: Output messages from the msgsteiner program,
 including optimization progress.
 
 The other files are intermediate files used to create the input for msgsteiner
