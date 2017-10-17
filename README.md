@@ -138,13 +138,20 @@ The output directory contains intermediate files and the following files that
 are most useful for interpreting and visualizing the networks.  For each input
 file `<sample>` listed in the `--terminalfile` input file, several output files
 will be created:
-* `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is
-the input sample name and `<options>` are the values of the `W`, `beta`, and
-`depth` arguments. This tab-separated file contains a line for each edge in the
-output network, where each line provides the names of the interacting proteins.
-The artificial root node has been removed.  The `steiner` edges are the edges
-from the optimal Steiner forest.  The `intra` edges are additional edges that
-have been added back to the Steiner forest.
+* `symbol_<sample>_<options>.txt`: `<sample>` is the input sample name and
+`<options>` are the values of the `W`, `beta`, and `depth` arguments. This
+space-separated file contains a line for each edge in the output network, where
+each line provides the names of the interacting proteins. The artificial root
+node `DUMMY` is still present. This is typically the most relevant
+representation of the output network. The edges are the same as the edges in the
+msgsteiner output file `<sample>_<options>.txt`.
+* `symbol_fullnetwork_<sample>_<options>.txt`: `<sample>` is the input sample name
+and `<options>` are the values of the `W`, `beta`, and `depth` arguments. This
+tab-separated file contains a line for each edge in the output network. The
+artificial root node has been removed.  The `steiner` edges are the edges from
+the optimal Steiner forest.  The `intra` edges are additional edges that have
+been added back to the Steiner forest, which are sometimes useful for
+identifying alternative pathway connections.
 * `<sample>_<options>.output`: Summary statistics of the Steiner forest produced.
 * `<sample>_<options>.objective`: Output messages from the msgsteiner program,
 including optimization progress.
