@@ -142,7 +142,9 @@ will be created:
 the input sample name and `<options>` are the values of the `W`, `beta`, and
 `depth` arguments. This tab-separated file contains a line for each edge in the
 output network, where each line provides the names of the interacting proteins.
-The artificial root node has been removed.
+The artificial root node has been removed.  The `steiner` edges are the edges
+from the optimal Steiner forest.  The `intra` edges are additional edges that
+have been added back to the Steiner forest.
 * `<sample>_<options>.output`: Summary statistics of the Steiner forest produced.
 * `<sample>_<options>.objective`: Output messages from the msgsteiner program,
 including optimization progress.
