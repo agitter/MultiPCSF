@@ -12,14 +12,11 @@
 # Multi-PCSF
 [![DOI](https://zenodo.org/badge/47654267.svg)](https://zenodo.org/badge/latestdoi/47654267)
 
-This repository contains an implementation of the multi-sample prize-collecting
-Steiner forest (Multi-PCSF) algorithm described in [Gitter et al 2014]. This
-version of the PCSF code is provided for reproducibility of the results in the
-manuscript but is no longer under active development.  Please see [Omics
-Integrator] for the current version of PCSF from Ernest Fraenkel's lab.
-However, Omics Integrator does not yet support the multi-sample feature
-introduced by Multi-PCSF.  The Omics Integrator website describes how to install
-the [msgsteiner] dependency, which is also required by Multi-PCSF.
+This repository contains an implementation of the multi-sample prize-collecting Steiner forest (Multi-PCSF) algorithm described in [Gitter et al 2014].
+This code is provided for reproducibility of the results in the manuscript but is no longer under active development.
+The [Omics Integrator] website describes how to install the [msgsteiner] dependency required by Multi-PCSF.
+
+[Omics Integrator 2](https://github.com/fraenkel-lab/OmicsIntegrator2/tree/master/multi-PCSF) from the Fraenkel laboratory contains a re-implementation of Multi-PCSF with additional features, such as support for a hierarchical clustering of samples.
 
 ## Example
 `BreastCancer.sh` in the scripts subdirectory provides an example of how to run
